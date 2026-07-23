@@ -1,0 +1,120 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if error %}
+
+<div class="alert alert-danger">
+    {{ error }}
+</div>
+
+{% endif %}
+
+<div class="container mt-5">
+    
+    <h2>Checkout</h2>
+
+    <hr>
+
+    <h4>Order Summary</h4>
+
+    <table class="table">
+        <tr>
+            <th>Book</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+        </tr>
+
+            {% for item in items %}
+
+        <tr>
+            <td>{{ item.book.title }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.subtotal }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <h3>Total: ₹{{ total }}</h3>
+
+    <hr>    
+
+    <form method="POST">
+        
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label>Shipping Address</label>
+
+            <textarea
+            class="form-control"
+            name="shipping_address"
+            required>
+            </textarea>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Phone Number</label>
+
+            <input
+            type="text"
+            name="phone"
+            class="form-control"
+            required>
+
+        </div>
+
+        <button class="btn btn-success btn-lg">
+
+           Place Order
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<button id="pay-btn" class="btn btn-success btn-lg">
+    Pay Now
+</button>
+
+<script>
+var options = {
+    key: "{{ razorpay_key }}",
+    amount: "{{ payment.amount }}",
+    currency: "INR",
+    name: "Online Book Store",
+    description: "Book Purchase",
+    order_id: "{{ payment.id }}",
+
+    handler: function (response) {
+
+        alert("Payment Successful!");
+
+        document.getElementById("payment_id").value =
+            response.razorpay_payment_id;
+
+        document.getElementById("checkout-form").submit();
+
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById("pay-btn").onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>

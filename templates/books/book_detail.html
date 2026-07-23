@@ -1,0 +1,174 @@
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5">
+    
+    <div class="row">
+
+        <!-- Left -->
+        <div class="col-md-4">
+
+            {% if book.image %}
+                <img src="{{ book.image.url }}"
+                    class="img-fluid rounded shadow"
+                    alt="{{ book.title }}">
+            {% else %}
+                <img src="{% static 'images/default_book.jpg' %}"
+                    class="img-fluid rounded shadow"
+                    alt="No Cover Available">
+            {% endif %}
+        </div>
+
+        <!-- Right -->
+        <div class="col-md-8">
+
+            <h1 class="fw-bold">
+                {{ book.title }}
+            </h1>
+
+            <p class="text-muted fs-5">
+                        
+                ⭐ Reviews :
+
+                {% if reviews.count > 0 %}
+                    {{ reviews.count }} review(s)
+                {% else %}
+                    No reviews yet
+                {% endif %}
+
+            </p>
+
+            <hr>
+
+            <h5>Author :{{ book.author }}</h5>
+
+            <h5>Category :{{ book.category }}</h5>
+
+            <h4 class="text-success mt-3">₹{{ book.price }}</h4>
+
+            <p>
+                <strong>ISBN :</strong>
+                {{ book.isbn }}
+            </p>
+
+            <p>
+                <strong>Publication :</strong>
+                {{ book.publication_date }}
+            </p>
+
+            <p>
+                <strong>Stock :</strong>
+
+                {% if book.stock > 0 %}
+
+                    <span class="badge bg-success">
+                        In Stock ({{ book.stock }})
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+                        Out of Stock
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+            <h4>Description</h4>
+
+            <p>
+                {{ book.description }}
+            </p>
+
+
+            {% if book.stock > 0 %}
+
+                <a href="{% url 'add_to_cart' book.id %}"
+                class="btn btn-success">
+                    🛒 Add To Cart
+                </a>
+
+            {% else %}
+
+                <button class="btn btn-danger" disabled>
+                    ❌ Out of Stock
+                </button>
+
+            {% endif %}
+
+
+                <!--            
+                <a href="{% url 'add_to_wishlist' book.id %}"
+                    class="btn btn-outline-danger btn-lg">
+                    ❤️ Add to Wishlist
+                </a>
+                -->
+
+                
+                
+    
+
+
+                <hr>
+
+                <h3>⭐ Customer Reviews</h3>
+
+            {% for review in reviews %}
+
+                <div class="card mb-3">
+
+                    <div class="card-body">
+
+                        <h5>{{ review.user.username }}</h5>
+
+                        <p>⭐ {{ review.rating }}/5</p>
+
+                        <p>{{ review.comment }}</p>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p>No reviews yet.</p>
+                    
+            {% endfor %}
+
+            <hr>
+
+            <h3>Write a Review</h3>
+
+            {% if user.is_authenticated %}
+
+                <form method="POST">
+
+                    {% csrf_token %}
+                    
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-success">
+                        Submit Review
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <p>Please login to write a review.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

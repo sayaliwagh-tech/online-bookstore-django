@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">📦 My Orders</h2>
+            <p class="text-muted mb-0">
+                Track, manage and reorder your purchases
+            </p>
+        </div>
+
+        <span class="badge bg-primary fs-6">
+            {{ orders.count }} Orders
+        </span>
+
+    </div>
+
+    {% for order in orders %}
+
+    <div class="card order-card shadow border-0 mb-5">
+
+        <!-- HEADER -->
+
+        <div class="card-header bg-light">
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        ORDER PLACED
+                    </small>
+
+                    <h6>{{ order.created_at|date:"d M Y" }}</h6>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        TOTAL
+                    </small>
+
+                    <h6>₹{{ order.total_price }}</h6>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <small class="text-muted">
+                        PAYMENT
+                    </small>
+
+                    {% if order.payment_status == "Paid" %}
+
+                    <span class="badge bg-success">
+                        Paid
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-danger">
+                        Pending
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col-md-3 text-end">
+
+                    <small class="text-muted">
+                        ORDER #
+                    </small>
+
+                    <h6>#{{ order.id }}</h6>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BODY -->
+
+        <div class="card-body">
+
+            <div class="mb-4">
+
+                {% if order.status == "Cancelled" %}
+
+                <h5 class="text-danger">
+                    ❌ Order Cancelled
+                </h5>
+
+                {% else %}
+
+                <h5 class="text-success">
+
+                    {{ order.status }}
+
+                </h5>
+
+                {% endif %}
+
+                <div class="progress mt-3" style="height:10px;">
+
+                    <div class="progress-bar bg-success"
+
+                    style="width:
+                    {% if order.status == 'Pending' %}20%
+                    {% elif order.status == 'Confirmed' %}40%
+                    {% elif order.status == 'Packed' %}60%
+                    {% elif order.status == 'Shipped' %}80%
+                    {% elif order.status == 'Delivered' %}100%
+                    {% else %}100%
+                    {% endif %}
+                    ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                {% for item in order.items.all %}
+
+                <div class="col-md-12">
+
+                    <div class="row border rounded p-3 mb-3 align-items-center">
+
+                        <!-- IMAGE -->
+
+                        <div class="col-md-2 text-center">
+
+                            {% if item.book.image %}
+
+                            <img src="{{ item.book.image.url }}"
+                                 class="img-fluid rounded book-img">
+
+                            {% endif %}
+
+                        </div>
+
+                        <!-- DETAILS -->
+
+                        <div class="col-md-5">
+
+                            <h5>
+
+                                {{ item.book.title }}
+
+                            </h5>
+
+                            <p class="text-muted">
+
+                                👤 {{ item.book.author.name }}
+
+                            </p>
+
+                            <p>
+
+                                Quantity :
+                                <strong>{{ item.quantity }}</strong>
+
+                            </p>
+
+                            <p>
+
+                                Price :
+                                <strong>₹{{ item.price }}</strong>
+
+                            </p>
+
+                        </div>
+
+                        <!-- SHIPPING -->
+
+                        <div class="col-md-3">
+
+                            <h6>📍 Delivery Address</h6>
+
+                            <small>
+
+                                {{ order.shipping_address }}
+
+                            </small>
+
+                            <br><br>
+
+                            📱 {{ order.phone }}
+
+                            <br><br>
+
+                            🚚
+
+                            {{ order.estimated_delivery }}
+
+                        </div>
+
+                        <!-- ACTIONS -->
+
+                        <div class="col-md-2 d-grid gap-2">
+
+                            <a href="{% url 'book_detail' item.book.id %}"
+
+                               class="btn btn-outline-primary btn-sm">
+
+                                View
+
+                            </a>
+
+                            <a href="{% url 'download_invoice' order.id %}"
+
+                               class="btn btn-primary btn-sm">
+
+                                Invoice
+
+                            </a>
+
+                            <a href="{% url 'buy_again' order.id %}"
+
+                               class="btn btn-success btn-sm">
+
+                                Buy Again
+
+                            </a>
+
+                            {% if order.status == "Pending" or order.status == "Confirmed" or order.status == "Packed" %}
+
+                            <a href="{% url 'cancel_order' order.id %}"
+
+                               class="btn btn-danger btn-sm">
+
+                                Cancel
+
+                            </a>
+
+                            {% endif %}
+
+                            {% if order.status == "Delivered" %}
+
+                            <a href="{% url 'book_detail' item.book.id %}"
+
+                               class="btn btn-warning btn-sm">
+
+                                ⭐ Review
+
+                            </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="alert alert-info">
+
+        No Orders Found.
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

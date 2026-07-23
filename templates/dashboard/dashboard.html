@@ -1,0 +1,185 @@
+
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">
+    📊 Admin Dashboard
+    </h2>
+
+    
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card text-center shadow">
+   
+                <div class="card-header">
+
+                    <h4>Top Selling Books</h4>
+                
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="bookChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card text-center shadow">
+                
+                <div class="card-body">
+
+                    <h5>Total Users</h5>
+
+                    <h2>{{ users }}</h2>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card text-center shadow">
+
+                <div class="card-body">
+
+                    <h5>Total Books</h5>
+
+                    <h2>{{ books }}</h2>
+                
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card text-center shadow">
+
+                <div class="card-body">
+
+                    <h5>Total Orders</h5>
+
+                    <h2>{{ orders }}</h2>
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card text-center shadow">
+
+                <div class="card-body">
+
+                    <h5>Total Reviews</h5>
+
+                    <h2>{{ reviews }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card text-center shadow">
+
+                <div class="card-body">
+
+                    <h5>Wishlist Items</h5>
+
+                    <h2>{{ wishlist }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card bg-success text-white text-center shadow">
+
+                <div class="card-body">
+
+                    <h5>Total Revenue</h5>
+
+                    <h2>₹{{ revenue }}</h2>
+
+                </div>
+            
+            </div>
+
+        </div>
+
+        <div class="card shadow mt-5">
+
+            <div class="card-header">
+
+                <h4>Monthly Sales</h4>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="salesChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+<script>
+    
+    const ctx = document.getElementById('salesChart');
+
+    new Chart(ctx,{
+        type:'line',
+        data:{
+            labels: {{ months|safe }},
+            datasets:[{
+                label:'Revenue',
+                data: {{ sales|safe }},
+                borderWidth:3,
+                fill:false
+                }]
+            }
+        });
+
+    new Chart(document.getElementById("bookChart"),{
+        type:"bar",
+        data:{
+            labels: {{ book_names|safe }},
+            datasets:[{
+                label:"Books Sold",
+                data: {{ book_sales|safe }}
+            }]
+            }
+        });
+
+
+</script>

@@ -1,0 +1,170 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>📚 All Books</h2>
+
+        <span class="badge bg-primary fs-6">
+            {{ page_obj.paginator.count }} Books Found
+        </span>
+    
+    </div>
+
+    <div class="card shadow-sm border-0 p-3 mb-4">
+
+        <form method="GET" class="row g-3 mb-4">
+
+            <div class="col-md-4">
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Search books..."
+                    value="{{ search|default:'' }}">
+            </div>
+
+            <div class="col-md-3">
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if selected_category == cat.id|stringformat:"s" %}
+                                selected
+                            {% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select name="sort" class="form-select">
+
+                    <option value="">Sort By</option>
+
+                    <option value="low"
+                    {% if sort == "low" %}selected{% endif %}>
+                        Price Low → High
+                    </option>
+
+                    <option value="high"
+                    {% if sort == "high" %}selected{% endif %}>
+                        Price High → Low
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">
+                    Search
+                </button>
+            </div>
+
+        </form>
+    
+    </div>
+
+    {% comment %}  {% endcomment %}
+    <div class="row g-4">
+
+        {% for book in page_obj %}
+
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+            <div class="card shadow-sm border-0 book-card"
+                 onclick="window.location.href='{% url 'book_detail' book.id %}'"
+                 style="cursor:pointer;">
+                
+                <!-- Bookmark-->
+                <a href="{% url 'add_to_wishlist' book.id %}"
+                    class="bookmark"
+                    onclick="event.stopPropagation();"
+                    style="cursor:pointer;">
+                    {% comment %} <i class="bi bi-bookmark-fill"></i> {% endcomment %}
+
+                    {% if book.id in wishlist_books %}
+                        <i class="bi bi-bookmark-fill saved-bookmark"></i>
+                    {% else %}
+                        <i class="bi bi-bookmark bookmark-outline"></i>
+                    {% endif %}
+                </a>
+
+                <!-- Book Image -->
+                {% if book.image and book.image.name %}
+                    <img src="{{ book.image.url }}"
+                        class="card-img-top book-img"
+                        alt="{{ book.title }}">
+                {% else %}
+                    <img src="https://placehold.co/300x450?text=No+Cover"
+                        class="card-img-top book-img"
+                        alt="No Cover">
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                        
+                    <span class="badge bg-secondary mb-2">
+                        {{ book.category.name}}
+                    </span>
+
+                    <h5 class="fw-bold">
+                        {{ book.title }}
+                    </h5>
+
+                    <p class="text-muted mb-1">
+                        👤{{ book.author.name }}
+                    </p>
+
+                    <h4 class="text-success fw-bold"> ₹{{ book.price }} </h4>
+
+
+                    <p class="text-warning">
+                        {% if book.average_rating %}
+
+                        ⭐ {{ book.average_rating|floatformat:1 }}/5
+
+                        {% else %}
+
+                        No Ratings
+
+                        {% endif %}
+
+                    </p>
+
+                    <div class="mt-auto">
+                       
+                        <a href="{% url 'add_to_cart' book.id %}"
+                            onclick="event.stopPropagation();"
+                            class="btn btn-warning w-100">
+                            🛒 Add to Cart
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12 text-center">
+            <h4>No books found.</h4>
+        </div>
+
+        {% endfor %}
+
+
+
+    </div>
+
+</div>
+{% endblock %}

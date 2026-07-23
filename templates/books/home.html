@@ -1,0 +1,205 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold">
+                    Discover Your Next
+                    <span class="text-primary">Favorite Book</span>
+                </h1>
+
+                <p class="lead text-muted mt-3">
+                    Explore thousands of books from bestselling authors around the world.
+                </p>
+
+                <a href="{% url 'book_list' %}" class="btn btn-primary btn-lg">
+                    Browse Books
+                </a>
+            </div>
+
+            <div class="col-lg-6 text-center">
+
+                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=700"
+                    class="img-fluid rounded">
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- Search bar -->
+<div class="container my-5">
+
+    <form method="GET" action="{% url 'book_list' %}">
+
+        <div class="input-group input-group-lg">
+
+            <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search Books, Authors, Categories">
+            
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search"></i>
+                Search
+            </button>
+        </div>
+
+    </form>
+
+</div>
+ 
+
+<!-- Featured Books -->
+<div class="container mt-5">
+    <h2 class="mb-4">
+        🔥 Featured Books
+    </h2>
+
+    <div class="row">
+
+        {% for book in featured_books %}
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card h-100 shadow"
+                 onclick="window.location.href='{% url 'book_detail' book.id %}'"
+                 style="cursor:pointer;">
+
+                <!-- Bookmark-->
+                <a href="{% url 'add_to_wishlist' book.id %}"
+                    class="bookmark"
+                    onclick="window.location.href='{% url 'book_detail' book.id %}'"
+                    style="cursor:pointer;">
+                    <i class="bi bi-bookmark-fill"></i>
+                </a>
+               
+
+                <!-- Book Image -->
+                {% if book.image %}
+
+                <img src="{{ book.image.url }}" 
+                    class="card-img-top" height="300" 
+                    style="object-fit:cover;">
+
+                {% else %}
+
+                <div class="text-center p-5 bg-light">
+                    No Image
+                </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5>{{ book.title }}</h5>
+
+                    <p> <strong>Author:</strong> {{ book.author }} </p>
+
+                    <p> <strong>Category:</strong> {{ book.category }} </p>
+
+                    <h4 class="text-success"> ₹{{ book.price }} </h4>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+{% empty %}
+
+<div class="col-12">
+    
+    <p>No books available.</p>
+</div>
+
+ {% endfor %}
+
+
+        
+<!-- New Arrivals -->
+<div class="container mt-5 mb-5">
+
+    <h2 class="mb-4">
+        🆕 New Arrivals
+    </h2>
+
+    <div class="row">
+
+        {% for book in new_books %}
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card h-100 shadow"
+                 onclick="window.location.href='{% url 'book_detail' book.id %}'"
+                 style="cursor:pointer;">
+
+
+                <a href="{% url 'add_to_wishlist' book.id %}"
+                
+                    class="bookmark"
+                    onclick="window.location.href='{% url 'book_detail' book.id %}'"
+                    style="cursor:pointer;">
+                    <i class="bi bi-bookmark-fill"></i>
+                </a>
+
+                <!-- Bookmark-->
+                {% comment %} <div class="wishlist-bookmark">
+                    <a href="{% url 'add_to_wishlist' book.id %}"
+                       onclick="event.stopPropagation();">
+                        <i class="bi bi-heart-fill ribbon-icon"></i>
+                    </a>
+                </div> {% endcomment %}
+
+                <!-- Bok Image -->
+                {% if book.image %}
+                    <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
+                {% else %}
+                    <img src="https://placehold.co/300x450?text=No+Cover"
+                        class="card-img-top"
+                        alt="No Cover">
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h5>{{ book.title }}</h5>
+
+                    <p>{{ book.author.name }}</p>
+
+                    <h4 class="text-success">
+                        ₹{{ book.price }}
+                    </h4>
+
+                    <a href="{% url 'book_detail' book.id %}"
+                       class="btn btn-success w-100">
+                        Buy Now
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+            <p>No new books available.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

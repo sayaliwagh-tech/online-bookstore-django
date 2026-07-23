@@ -1,0 +1,85 @@
+
+
+
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">
+          📚 Browse Categories
+        </h1>
+
+        <p class="text-muted">
+            Discover books from every genre
+        </p>
+    </div>
+    
+    <div class="row g-4">
+
+        {% for category in categories %}
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="category-card shadow"
+                 onclick="window.location.href='{% url 'book_list' %}?category={{ category.id}}'"
+                 style="cursor:pointer;">
+
+                {% if category.name == "Programming" %}
+                    <div class="icon">💻</div>
+                
+                {% elif category.name == "Python" %}
+                    <div class="icon">🐍</div>
+
+                {% elif category.name == "Java" %}
+                    <div class="icon">☕</div>
+
+                {% elif category.name == "SQL" %}
+                    <div class="icon">🗄️</div>
+
+                {% elif category.name == "Data Analytics" %}
+                    <div class="icon">📊</div>
+
+                {% elif category.name == "Machine Learning" %}
+                    <div class="icon">🤖</div>
+
+                {% elif category.name == "Artificial Intelligence" %}
+                    <div class="icon">🧠</div>
+
+                {% elif category.name == "Finance" %}
+                    <div class="icon">💰</div>
+
+                {% elif category.name == "Self Help" %}
+                    <div class="icon">🌱</div>
+                    
+                {% elif category.name == "Biography" %}
+                    <div class="icon">👤</div>
+
+
+                {% elif category.name == "Fiction" %}
+                    <div class="icon">📖</div>
+
+                {% else %}
+                    <div class="icon">📚</div>
+                {% endif %}
+
+                <h3>{{ category.name }}</h3>
+
+                <p> {{ category.book_set.count }} Books Available </p>
+
+            </div>
+        
+        </div>
+
+        {% endfor %}
+    
+    </div>
+
+</div>
+
+{% endblock %}
+                    

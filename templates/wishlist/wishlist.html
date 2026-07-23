@@ -1,0 +1,76 @@
+
+
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">🔖 My Shelf </h2>
+
+    {% if items %}
+
+    <div class="row">
+
+        {% for item in items %}
+
+        <div class="col-md-3 md-4">
+
+            <div class="card h-100 shadow-sm">
+
+                {% if item.book.image and item.book.image.name %}
+                    <img src="{{ item.book.image.url }}"
+                        class="card-img-top book-img"
+                        alt="{{ item.book.title }}">
+                {% else %}
+                    <img src="https://placehold.co/300x450?text=No+Cover"
+                        class="card-img-top book-img"
+                        alt="No Cover">
+                {% endif %}
+
+                <div class='card-body'>
+                    <h5>{{ item.book.title }}</h5>
+                    <p>{{ item.book.author.name }}</p>
+                    <h4 class="text-success">
+                        ₹{{ item.book.price }}
+                    </h4>
+
+                    <a href="{% url 'book_detail' item.book.id %}"
+                       class="btn btn-primary w-100 mb-2">
+                        View Book
+                    </a>
+
+
+
+
+
+                    <a href="{% url 'add_to_wishlist' item.book.id %}"
+                       class="bookmark"
+                       onclick="event.stopPropagation();">
+
+                        <i class="bi bi-bookmark-fill"></i>
+
+                    </a>
+
+        
+                
+                </div>
+            
+            </div>
+        
+        </div>
+    
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+        Your shelf is empty.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

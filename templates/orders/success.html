@@ -1,0 +1,29 @@
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container text-center mt-5">
+
+<h1>🎉 Order Placed Successfully!</h1>
+
+<p>Your order has been placed.</p>
+
+<a href="{% url 'my_orders' %}"
+class="btn btn-primary">
+
+My Orders
+
+</a>
+
+<a href="{% url 'buy_again' order.id %}"
+   class="btn btn-success">
+    🛒 Buy Again
+
+</a>
+
+</div>
+
+{% endblock %}
