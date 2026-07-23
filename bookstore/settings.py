@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5$1q14w3@hzop9q&5$q_7870x3rctvb@%c2u=jle)0o2e7re3x'
+SECRET_KEY = 'django-insecure-***************************************'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,9 +84,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'online_bookstore',
-        'USER': 'root',
-        'PASSWORD': 'Sayaroot@321',
-        'HOST': 'localhost',
+        'USER': 'user',
+        'PASSWORD': 'Password',
+        'HOST': 'host',
         'PORT': '3306',
     }
 }
@@ -136,6 +136,6 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 
-RAZORPAY_KEY_ID = "rzp_test_TEty1W6i6YNIUy"
+RAZORPAY_KEY_ID = "****************"
 
-RAZORPAY_KEY_SECRET = "D20Y8p0Y4TQCQDOs0GKz3of6"
+RAZORPAY_KEY_SECRET = "******************"
