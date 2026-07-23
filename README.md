@@ -120,7 +120,7 @@ screenshots/
 
 After adding screenshots:
 
-## 🏠 Home
+## 🏠 Home Page
 
 ![Home](screenshots/home.png)
 
